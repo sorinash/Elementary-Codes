@@ -1,0 +1,88 @@
+# follows the rules of Conway's Game of Life.
+# You start off with an arena consisting of multiple cells
+# they're either alive, represented by an "X" or dead, represented by an "O" 
+# At each step, each cell is checked to see how many neighbors it has
+# If a living cell has 2 or 3 neighbors, it lives. Otherwise it dies. 
+# If a dead cell has exactly 3 neighbors, it is updated as a living cell.
+
+
+# the arena takes a two-dimensional array of Xs and Os as a map. 
+
+class arena():
+    def __init__(self, arenamap):
+        self.arenamap = arenamap.split('\n') #each new line is taken as a separate row
+        self.arenamap = [i for i in self.arenamap if i != '']  #In the event of empty lines, they get stripped
+
+            
+        self.width = len(self.arenamap[0]) #width and height are used for edge checking
+        self.height = len(self.arenamap)
+        
+    def edgechecker(self,x,y): #take a set of input coordinates and makes a decision of which surrounding cells to sample
+        xopt = [-1,0,1]
+        yopt = [-1,0,1]
+        # if it's on the left-hand edge, only the current and subsequent horizontal cells are taken
+        # if it's on the right-hand edge, only the prior and current horizontal cells are taken
+        if x == 0: 
+            xopt = [0,1]
+        elif x == self.width - 1:
+            xopt = [-1,0]
+        else:
+            xopt = [-1,0,1]
+        # if it's on the top, follow the rules of the left-hand edge
+        # it it's on the bottom, follow the rules of the right-hand edge
+        # but vertically
+        if y == 0:
+            yopt = [0,1]
+        elif y == self.height -1:
+            yopt = [-1,0]
+        else:
+            yopt = [-1,0,1]
+        return [xopt,yopt]
+    
+    def checkneighbors(self,x,y): # takes a set of input coordinates, checks for edges, finds the neighbors
+        options = self.edgechecker(x,y)
+        xopt= options[0]
+        yopt = options[1]
+        neighbors = 0
+        #goes through each of the options for x and y to add to the coordinates
+        #sees if those coordinates bear a living cell
+        #if so add it one to the number of neighbors
+        for i in (xopt):
+            for j in (yopt):
+                if self.arenamap[j+y][i+x] == 'X':
+                    neighbors += 1
+        # if the coordinates contain a living cell, subtract one from the neighbors
+        if self.arenamap[y][x] == 'X':
+            return neighbors - 1
+        return neighbors
+    def liveordie(self,x,y): # Takes a cell, finds the neighbors, outputs living or dead based on the above rules
+        textcell = self.arenamap[y][x]
+        neighbors = self.checkneighbors(x,y)
+        if textcell == 'O' and neighbors == 3:
+            return 'X'
+        elif textcell == 'X' and neighbors > 3:
+            return 'O'
+        elif textcell == 'X' and neighbors < 2:
+            return 'O'
+        else:
+            return textcell
+    def updatethemap(self):
+        # goes through every coordinate on the map, adds the liveordie results to a placeholder
+        # then updates the map as the placeholder
+        tempmap = []
+        for row in range(len(self.arenamap)):
+            updaterow = ''
+            for col in range(len(self.arenamap[row])):
+                updaterow += (self.liveordie(col,row))
+            tempmap.append(updaterow)
+        self.arenamap = tempmap
+    def portraythemap(self): #joins the lines and prints them all
+        print('\n'.join(self.arenamap))
+
+def runthegame(newarena,iterations):
+    newarena.portraythemap() # portrays the map
+    for i in range(iterations): # for X number of iterations, updates and portrays the map
+        newarena.updatethemap()
+        print('----------------')
+        newarena.portraythemap()
+    
