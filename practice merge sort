@@ -1,0 +1,69 @@
+# a basic merge sort algorithm
+
+# takes a list and divides it into two
+# ultimately divides the list until it's a collection of one-element lists
+
+
+
+# [10,5,9,8,2,6,4,7,3,1] becomes:
+# [10,5,9,8,2] and [6,4,7,3,1] becomes: 
+# [10,5,9] and [8,2], and [6,4,7] and [3,1] becomes
+# ([10,5],[9]) and ([8] and [2]) and ([6,4] and [7]) and (3 and 1)
+# etc
+# before ultimately deciding which is the least among these
+
+# to merge, you take the lowest of each two lists and compare them, and add to the head of the new merged list
+# continue until nothing is left
+
+
+#takes two input lists and merges them based on the size of their contents
+def practicemerge(inlist1,inlist2): 
+    print('first up is')
+    print(inlist1)
+    print('second up is')
+    print(inlist2)
+    listlamb = lambda x: [x] if type(x) == int else x # in the event that the function is passed an int it's made into a list 
+    inlist1 = listlamb(inlist1) 
+    inlist2 = listlamb(inlist2)
+    if inlist1 == [] and inlist2 == []: #if both lists are blank (which should be impossible) then it returns nothing
+        return
+    elif inlist1 == []: #otherwise it returns the remaining members of the list which isn't blank
+        return inlist2
+    elif inlist2 == []:
+        return inlist1
+    outlist = [] # if neither list is blank we come here 
+    print('so now we are here')
+    if inlist1[0] < inlist2[0]:  # based on the size of the list
+        
+        outlist.append(inlist1[0]) # we append the smaller of the two
+        outnew = practicemerge(inlist1[1:],inlist2) # and then repeat the function after removing the added member
+        for i in listlamb(outnew): 
+            outlist.append(i)
+    else:
+        outlist.append(inlist2[0])
+        outnew = practicemerge(inlist1,inlist2[1:])
+        #print(outnew)
+        for i in listlamb(outnew):
+            outlist.append(i)
+    
+    return outlist # then return the output list.
+
+    
+def breakitdown(listin): # performs the splitting function
+    print(listin)
+    if len(listin) == 0: # if there's nothing there, it returns nothing. 
+        return
+    elif len(listin) == 1: # if the list is only 1 element long, it returns the list
+        return listin[0]
+    elif len(listin) == 2: # if the list is precisely 2 elements long, it returns a sorted version of the list
+        return [min(listin),max(listin)]
+    else: # otherwise 
+        center = int(len(listin)/2) # it creates a center based on the floor of the halfway point between the beginning and end
+        firstlist = listin[0:(center)] #it creates one list of the first half
+        secondlist = listin[center:] # it creates another list of the second half 
+        slist1 = breakitdown(firstlist) # it then repeatedly breaks down the first list
+        print(slist1) 
+        slist2 = breakitdown(secondlist) # as well as the second list
+        sortlist = practicemerge(slist1,slist2) # at this point it'll take the two lists, which themselves should be sorted
+                                                # and then performs a merging function on them
+    return sortlist # then returns the sortlist
