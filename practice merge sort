@@ -18,10 +18,6 @@
 
 #takes two input lists and merges them based on the size of their contents
 def practicemerge(inlist1,inlist2): 
-    print('first up is')
-    print(inlist1)
-    print('second up is')
-    print(inlist2)
     listlamb = lambda x: [x] if type(x) == int else x # in the event that the function is passed an int it's made into a list 
     inlist1 = listlamb(inlist1) 
     inlist2 = listlamb(inlist2)
@@ -31,8 +27,7 @@ def practicemerge(inlist1,inlist2):
         return inlist2
     elif inlist2 == []:
         return inlist1
-    outlist = [] # if neither list is blank we come here 
-    print('so now we are here')
+    outlist = [] # if neither list is blank we come here and create an output list
     if inlist1[0] < inlist2[0]:  # based on the size of the list
         
         outlist.append(inlist1[0]) # we append the smaller of the two
@@ -50,7 +45,6 @@ def practicemerge(inlist1,inlist2):
 
     
 def breakitdown(listin): # performs the splitting function
-    print(listin)
     if len(listin) == 0: # if there's nothing there, it returns nothing. 
         return
     elif len(listin) == 1: # if the list is only 1 element long, it returns the list
