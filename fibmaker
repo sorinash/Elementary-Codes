@@ -1,0 +1,16 @@
+# straightforward look at making a Fibonacci sequence to reach the nth number
+# in the sequence. Upon starting with two variables with value 1, the script
+# renders the first variable (a) equal to b , and the second variable, (b) equal
+# to a+b. It then adds b to the list of variables and reruns this loop until it
+# reaches the nth iteration. 
+
+def fibmaker(number):
+    i = 0
+    a = 1
+    b = 1
+    numblist = [a,b]
+    while i<number:
+        [a,b] = [b,a+b]
+        numblist.append(b)
+        i+=1
+    return numblist
