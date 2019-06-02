@@ -1,5 +1,3 @@
-
-
 def binadd(num1,num2):
     bnm1 = bin(num1)[2:] # converts the first number to binary
     bnm2 = bin(num2)[2:] # converts the second number to binary
