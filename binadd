@@ -1,0 +1,42 @@
+
+
+def binadd(num1,num2):
+    bnm1 = bin(num1)[2:] # converts the first number to binary
+    bnm2 = bin(num2)[2:] # converts the second number to binary
+    bnml = [bnm1,bnm2]
+    bnmr1 = [i for i in bnml if len(i) == min([len(bnm1),len(bnm2)])][0] # selects shortest list
+    bnml.remove(bnmr1) # removes the shortest list from the list of lists
+    bnmr2 = bnml[0] # selects the remaining list for bnmr2
+    [bnmr1,bnmr2] = [list(i)[::-1] for i in [bnmr1,bnmr2]] # converts the two into reversed list of digits
+    zerorange = abs(len(bnmr1) - len(bnmr2)) # finds the length discrepancy between the two lists
+    zerolist = [0 for i in range(zerorange)] # creates a list of zeroes with that same length
+    bnmr1.extend(zerolist) # adds that to the smaller number
+    remainlamb = lambda x: True if x == '1' else False # serves to convert digits to boolean
+    interpretlamb = lambda y: '1' if y else '0' # serves to convert boolean to digits
+    carry = False # serves as a carried digit
+    outdig = [] 
+    for i in range(len(bnmr1)):
+        bbool1 = (bnmr1.pop(0) == '1') # converts a 1 into a true and a 0 into a false
+        bbool2 = (bnmr2.pop(0) == '1')
+        # the next line sets up firstadd as bbool1 xor bbool2
+        firstadd = (bbool1 and not bbool2) or (bbool2 and not bbool1) 
+        # the next line sets up the carried digit as carry xor firstadd
+        carryadd = (firstadd and not carry) or (carry and not firstadd)
+        # if at least two of the inputs are True, set carry to True, otherwise set carry to False
+        carry = (carry and bbool1) or (carry and bbool2) or (bbool1 and bbool2) 
+        #adds it on. 
+        outdig.append(carryadd)
+    if carry: 
+        outdig.append(True) # if there's a carry value, appends a True to the end. 
+    remaining = [remainlamb(a) for a in bnmr2] # converts the remaining values to booleans
+    outdig.extend(remaining) # tacks those booleans on
+    # interprets and unites the list of booleans
+    outdig = ''.join([interpretlamb(i) for i in outdig]) 
+    #goes through the outdig, takes the digit, multiply by 2^digit. 
+    outdec = [int(outdig[i]) * (2 ** i) for i in range(0,len(outdig))]
+    # reverses and returns the outdig, returns the sum
+    return outdig[::-1],sum(outdec)
+
+a,b = binadd(9,10)
+print(a)
+print(b)
